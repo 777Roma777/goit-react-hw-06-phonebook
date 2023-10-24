@@ -3,13 +3,18 @@ import ContactForm from 'components/ContactsForm/contactForm';
 import ContactsList from 'components/ContactsList/contactList';
 import Filter from 'components/Filter/filter';
 import { nanoid } from 'nanoid';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 export const App = () => {
-  const [contacts, setContacts] = useState([]);
-  const [filter, setFilter] = useState('');
+  // const [contacts, setContacts] = useState([]);
+  // const [filter, setFilter] = useState('');
 
+  const contacts = useSelector(state => state.contactData.contacts);
+  const filter = useSelector(state => state.contactData.filter);
 
+  const dispatch = useDispatch();
+  
   const handleAddContact = (name, number) => {
     if (name.trim() === '' || number.trim() === '') return;
 
@@ -27,26 +32,38 @@ export const App = () => {
       name: name,
       number: number,
     };
-
-    setContacts(prevContacts => [...prevContacts, newContact]);
+    dispatch({
+      type: 'contactData/setContacts',
+      payload: [...contacts, newContact],
+    });
+    // setContacts(prevContacts => [...prevContacts, newContact]);
   };
 
   const handleFilterChange = e => {
-    setFilter(e.target.value);
+    dispatch({ type: 'contactData/setFilter', payload: e.target.value });
+    // setFilter(e.target.value);
   };
 
   const handleDeleteContact = contactId => {
-    setContacts(prevContacts =>
-      prevContacts.filter(contact => contact.id !== contactId)
-    );
+    dispatch({
+      type: 'contactData/setContacts',
+      payload: contacts.filter(contact => contact.id !== contactId),
+    });
+    // setContacts(prevContacts =>
+    //   prevContacts.filter(contact => contact.id !== contactId)
+    // );
   };
 
   useEffect(() => {
     const savedContacts = localStorage.getItem('Contacts');
     if (savedContacts) {
-      setContacts(JSON.parse(savedContacts));
+      // setContacts(JSON.parse(savedContacts));
+      dispatch({
+        type: 'contactData/setContacts',
+        payload: JSON.parse(savedContacts),
+      });
     }
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     localStorage.setItem('Contacts', JSON.stringify(contacts));
