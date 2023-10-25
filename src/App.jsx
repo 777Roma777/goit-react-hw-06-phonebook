@@ -5,16 +5,18 @@ import Filter from 'components/Filter/filter';
 import { nanoid } from 'nanoid';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { setContacts, setFilter } from 'components/redux/contactDataReducer';
+
 
 export const App = () => {
   // const [contacts, setContacts] = useState([]);
   // const [filter, setFilter] = useState('');
 
-  const contacts = useSelector(state => state.contactData.contacts);
-  const filter = useSelector(state => state.contactData.filter);
+  const contacts = useSelector(state => state.contactsData.contacts);
+  const filter = useSelector(state => state.contactsData.filter);
 
   const dispatch = useDispatch();
-  
+
   const handleAddContact = (name, number) => {
     if (name.trim() === '' || number.trim() === '') return;
 
@@ -32,36 +34,27 @@ export const App = () => {
       name: name,
       number: number,
     };
-    dispatch({
-      type: 'contactData/setContacts',
-      payload: [...contacts, newContact],
-    });
+    dispatch(setContacts([...contacts, newContact]));
     // setContacts(prevContacts => [...prevContacts, newContact]);
   };
 
   const handleFilterChange = e => {
-    dispatch({ type: 'contactData/setFilter', payload: e.target.value });
+    dispatch(setFilter(e.target.value));
     // setFilter(e.target.value);
   };
 
   const handleDeleteContact = contactId => {
-    dispatch({
-      type: 'contactData/setContacts',
-      payload: contacts.filter(contact => contact.id !== contactId),
-    });
+    dispatch(setContacts(contacts.filter(contact => contact.id !== contactId)));
     // setContacts(prevContacts =>
     //   prevContacts.filter(contact => contact.id !== contactId)
     // );
   };
 
   useEffect(() => {
-    const savedContacts = localStorage.getItem('Contacts');
+    const savedContacts = localStorage.getItem('сontacts');
     if (savedContacts) {
       // setContacts(JSON.parse(savedContacts));
-      dispatch({
-        type: 'contactData/setContacts',
-        payload: JSON.parse(savedContacts),
-      });
+      dispatch(setContacts(JSON.parse(savedContacts)));
     }
   }, [dispatch]);
 
