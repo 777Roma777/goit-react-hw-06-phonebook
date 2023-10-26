@@ -29,17 +29,20 @@ const ContactForm = () => {
   };
 
   const handleAddContact = (name, number) => {
-    if (name.trim() === '' || number.trim() === '') return;
-
+    if (!name || !number) {
+      // Ви можете додати обробку помилки, якщо дані не введені
+      return;
+    }
+  
     const isPresent = contacts.some(
-      contact => contact.name.toLowerCase() === name.toLowerCase()
+      contact => contact.name && contact.name.toLowerCase() === name.toLowerCase()
     );
-
+  
     if (isPresent) {
       alert(`${name} is already in contacts! Please enter a different name`);
       return;
     }
-
+  
     const newContact = {
       id: nanoid(),
       name: name,
@@ -47,6 +50,7 @@ const ContactForm = () => {
     };
     dispatch(setContacts([...contacts, newContact]));
   };
+  
 
   return (
     <form className={css.form} onSubmit={handleSubmit}>

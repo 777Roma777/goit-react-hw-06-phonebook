@@ -21,12 +21,13 @@ const ContactsList = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    localStorage.setItem('Contacts', JSON.stringify(contacts));
+    localStorage.setItem('сontacts', JSON.stringify(contacts));
   }, [contacts]);
 
   const filteredContacts = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(filter.toLowerCase())
+    contact.name && contact.name.toLowerCase().includes(filter.toLowerCase())
   );
+  
   return (
     <ul className={css.contactsList}>
       {filteredContacts.map(contact => (
