@@ -2,7 +2,7 @@ import React from 'react';
 import css from './contactForm.module.css';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setContacts } from 'components/redux/contactDataReducer';
+import { addContact } from 'components/redux/contactDataReducer';
 import { nanoid } from 'nanoid';
 
 const ContactForm = () => {
@@ -33,24 +33,24 @@ const ContactForm = () => {
       // Ви можете додати обробку помилки, якщо дані не введені
       return;
     }
-  
+
     const isPresent = contacts.some(
-      contact => contact.name && contact.name.toLowerCase() === name.toLowerCase()
+      contact =>
+        contact.name && contact.name.toLowerCase() === name.toLowerCase()
     );
-  
+
     if (isPresent) {
       alert(`${name} is already in contacts! Please enter a different name`);
       return;
     }
-  
+
     const newContact = {
       id: nanoid(),
       name: name,
       number: number,
     };
-    dispatch(setContacts([...contacts, newContact]));
+    dispatch(addContact(newContact));
   };
-  
 
   return (
     <form className={css.form} onSubmit={handleSubmit}>
