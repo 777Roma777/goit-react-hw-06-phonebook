@@ -30,7 +30,7 @@ const ContactForm = () => {
 
   const handleAddContact = (name, number) => {
     if (!name || !number) {
-      // Ви можете додати обробку помилки, якщо дані не введені
+      
       return;
     }
 
